@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Client - SysZenix CRM{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 py-3">
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h4 class="fw-bold mb-1 text-dark">Edit Client Details</h4>
+            <p class="text-muted small mb-0">Update profile information for client ID <span class="fw-semibold text-dark">#{{ client[0] }}</span>.</p>
+        </div>
+        <a href="/manage-client" class="btn btn-light text-secondary border px-3 py-2 fw-medium shadow-sm" style="border-radius: 10px;">
+            <i class="bi bi-arrow-left me-1"></i> Back to Clients
+        </a>
+    </div>
+    
+    <!-- Form Card -->
+    <div class="card border border-light shadow-sm p-4 bg-white" style="border-radius: 14px;">
+        <form action="/edit-client/{{ client[0] }}" method="POST">
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-secondary small">Client Name *</label>
+                    <input type="text" class="form-control bg-light border-0 py-2" name="name" value="{{ client[1] }}" required style="border-radius: 10px;">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-secondary small">Email Address</label>
+                    <input type="email" class="form-control bg-light border-0 py-2" name="email" value="{{ client[2] }}" style="border-radius: 10px;">
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-secondary small">Phone Number</label>
+                    <input type="text" class="form-control bg-light border-0 py-2" name="phone" value="{{ client[3] }}" style="border-radius: 10px;">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-secondary small">Company Name</label>
+                    <input type="text" class="form-control bg-light border-0 py-2" name="company" value="{{ client[4] }}" style="border-radius: 10px;">
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-secondary small">Website</label>
+                    <input type="text" class="form-control bg-light border-0 py-2" name="website" value="{{ client[5] }}" style="border-radius: 10px;">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-secondary small">Status</label>
+                    <select class="form-select bg-light border-0 py-2" name="status" style="border-radius: 10px;">
+                        <option value="Active" {% if client[7] == 'Active' %}selected{% endif %}>Active</option>
+                        <option value="Inactive" {% if client[7] == 'Inactive' %}selected{% endif %}>Inactive</option>
+                        <option value="Pending" {% if client[7] == 'Pending' %}selected{% endif %}>Pending</option>
+                        <option value="Completed" {% if client[7] == 'Completed' %}selected{% endif %}>Completed</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Login Credentials Section -->
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-secondary small">
+                        Login username {% if has_login %}<span class="text-muted fw-normal">(current: {{ current_username }})</span>{% endif %}
+                    </label>
+                    <input type="text" class="form-control bg-light border-0 py-2" name="username" placeholder="{% if has_login %}Change username (optional){% else %}Set username to enable login{% endif %}" style="border-radius: 10px;">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-secondary small">Login password</label>
+                    <input type="password" class="form-control bg-light border-0 py-2" name="password" placeholder="{% if has_login %}Leave blank to keep current{% else %}Required to create login{% endif %}" style="border-radius: 10px;">
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-semibold text-secondary small">Services Provided</label>
+                <textarea class="form-control bg-light border-0 py-2" name="services" rows="3" style="border-radius: 10px;">{{ client[6] }}</textarea>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 border-top pt-3">
+                <a href="/manage-client" class="btn btn-light px-4 py-2 fw-medium text-secondary" style="border-radius: 10px;">Cancel</a>
+                <button type="submit" class="btn btn-dark px-4 py-2 fw-medium shadow-sm" style="border-radius: 10px;">
+                    <i class="bi bi-save me-1"></i> Update Client
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

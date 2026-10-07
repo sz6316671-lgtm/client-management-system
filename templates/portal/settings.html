@@ -1,0 +1,55 @@
+{% extends "portal/portal_base.html" %}
+
+{% block content %}
+<div class="space-y-6 max-w-3xl mx-auto">
+    <!-- Page Header -->
+    <div>
+        <h1 class="text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">Account Settings</h1>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Update your personal profile information and security credentials.</p>
+    </div>
+
+    <!-- Settings Form Card -->
+    <div class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-slate-200/80 dark:border-slate-800 rounded-[12px] p-6 sm:p-8 shadow-sm">
+        <form method="POST" class="space-y-5">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <!-- Name Field -->
+                <div>
+                    <label class="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1.5">Full Name</label>
+                    <input type="text" name="name" value="{{ client[1] or '' }}" required
+                        class="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-[12px] px-3.5 py-2.5 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-slate-100">
+                </div>
+
+                <!-- Email Field -->
+                <div>
+                    <label class="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1.5">Email Address</label>
+                    <input type="email" name="email" value="{{ client[2] or '' }}" required
+                        class="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-[12px] px-3.5 py-2.5 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-slate-100">
+                </div>
+            </div>
+
+            <!-- Phone Field (Ab yeh akele ya grid mein aaram se set hai) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div>
+                    <label class="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1.5">Phone Number</label>
+                    <input type="text" name="phone" value="{{ client[3] or '' }}"
+                        class="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-[12px] px-3.5 py-2.5 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-slate-100">
+                </div>
+            </div>
+
+            <!-- Password Change Section -->
+            <div class="pt-4 border-t border-slate-200/60 dark:border-slate-800/60">
+                <label class="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1.5">New Password <span class="text-slate-400 font-normal">(Leave blank to keep current password)</span></label>
+                <input type="password" name="password" placeholder="••••••••"
+                    class="w-full sm:w-1/2 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-[12px] px-3.5 py-2.5 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-slate-100">
+            </div>
+
+            <!-- Submit Button -->
+            <div class="pt-4 flex justify-end">
+                <button type="submit" class="bg-slate-900 hover:bg-slate-800 text-white dark:bg-slate-100 dark:hover:bg-white dark:text-slate-900 font-medium px-5 py-2.5 rounded-[12px] text-sm transition-colors shadow-sm">
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

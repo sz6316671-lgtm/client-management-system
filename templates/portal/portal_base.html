@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ branding.company_name }} Client Portal</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    borderRadius: {
+                        rizz: '12px',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen flex antialiased">
+
+    <!-- Sidebar (Desktop) -->
+    <aside class="w-64 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-r border-slate-200/80 dark:border-slate-800 flex flex-col justify-between hidden md:flex sticky top-0 h-screen">
+        <div>
+            <!-- Brand / Logo Header -->
+            <div class="h-16 flex items-center px-6 border-b border-slate-200/60 dark:border-slate-800/60">
+                {% if branding.logo_url %}
+                    <img src="{{ branding.logo_url }}" alt="{{ branding.company_name }} logo"
+                         style="max-width:150px; max-height:38px; object-fit:contain;">
+                {% else %}
+                    <span class="font-semibold text-base tracking-tight text-slate-900 dark:text-white">{{ branding.company_name }} <span class="text-xs font-normal text-slate-500">Portal</span></span>
+                {% endif %}
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="p-4 space-y-1.5">
+                <a href="{{ url_for('client_portal.dashboard') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-[12px] text-sm font-medium transition-colors {% if request.endpoint == 'client_portal.dashboard' %}bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 shadow-sm{% else %}text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-slate-200{% endif %}">
+                    <span>Dashboard</span>
+                </a>
+                <a href="{{ url_for('client_portal.my_projects') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-[12px] text-sm font-medium transition-colors {% if request.endpoint == 'client_portal.my_projects' %}bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 shadow-sm{% else %}text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-slate-200{% endif %}">
+                    <span>My Projects</span>
+                </a>
+                <a href="{{ url_for('client_portal.my_invoices') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-[12px] text-sm font-medium transition-colors {% if request.endpoint == 'client_portal.my_invoices' %}bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 shadow-sm{% else %}text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-slate-200{% endif %}">
+                    <span>My Invoices</span>
+                </a>
+                <a href="{{ url_for('client_portal.my_payments') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-[12px] text-sm font-medium transition-colors {% if request.endpoint == 'client_portal.my_payments' %}bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 shadow-sm{% else %}text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-slate-200{% endif %}">
+                    <span>My Payments</span>
+                </a>
+                <!-- Settings Link (Added) -->
+                <a href="{{ url_for('client_portal.settings') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-[12px] text-sm font-medium transition-colors {% if request.endpoint == 'client_portal.settings' %}bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 shadow-sm{% else %}text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-slate-200{% endif %}">
+                    <span>Settings</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- User / Logout Footer -->
+        <div class="p-4 border-t border-slate-200/60 dark:border-slate-800/60">
+            <div class="flex items-center justify-between">
+                <div class="truncate pr-2">
+                    <p class="text-xs font-semibold text-slate-900 dark:text-slate-200 truncate">{{ session.get('username', 'Client') }}</p>
+                    <p class="text-[10px] text-slate-500 dark:text-slate-400">Client Workspace</p>
+                </div>
+                <a href="{{ url_for('logout') if 'logout' in url_for.__globals__ or True else '#' }}" class="p-2 text-slate-500 hover:text-red-600 dark:text-slate-400 dark:hover:text-red-400 rounded-[12px] hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" title="Logout">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                </a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Wrapper -->
+    <div class="flex-1 flex flex-col min-w-0">
+        <!-- Mobile Top Navbar -->
+        <header class="h-16 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between px-4 md:hidden sticky top-0 z-50">
+            <span class="font-semibold text-sm text-slate-900 dark:text-white">{{ branding.company_name }} Portal</span>
+            <div class="flex items-center gap-1.5 overflow-x-auto py-1">
+                <a href="{{ url_for('client_portal.dashboard') }}" class="text-[11px] font-medium px-2.5 py-1 rounded-[12px] {% if request.endpoint == 'client_portal.dashboard' %}bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900{% else %}bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400{% endif %}">Dashboard</a>
+                <a href="{{ url_for('client_portal.my_projects') }}" class="text-[11px] font-medium px-2.5 py-1 rounded-[12px] {% if request.endpoint == 'client_portal.my_projects' %}bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900{% else %}bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400{% endif %}">Projects</a>
+                <a href="{{ url_for('client_portal.my_invoices') }}" class="text-[11px] font-medium px-2.5 py-1 rounded-[12px] {% if request.endpoint == 'client_portal.my_invoices' %}bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900{% else %}bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400{% endif %}">Invoices</a>
+                <a href="{{ url_for('client_portal.my_payments') }}" class="text-[11px] font-medium px-2.5 py-1 rounded-[12px] {% if request.endpoint == 'client_portal.my_payments' %}bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900{% else %}bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400{% endif %}">Payments</a>
+                <a href="{{ url_for('client_portal.settings') }}" class="text-[11px] font-medium px-2.5 py-1 rounded-[12px] {% if request.endpoint == 'client_portal.settings' %}bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900{% else %}bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400{% endif %}">Settings</a>
+            </div>
+        </header>
+
+        <!-- Flash Messages Display -->
+        <div class="max-w-6xl w-full mx-auto px-4 sm:px-6 pt-4">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="space-y-2 mb-4">
+                        {% for category, message in messages %}
+                            <div class="px-4 py-3 rounded-[12px] text-xs font-medium border shadow-xs {% if category in ['danger', 'error'] %}bg-red-50 text-red-800 border-red-200 dark:bg-red-950/40 dark:text-red-300 dark:border-red-900/60{% else %}bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-900/60{% endif %}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        <!-- Dynamic Child Content Block -->
+        <main class="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+</body>
+</html>

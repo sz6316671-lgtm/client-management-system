@@ -1,0 +1,59 @@
+{% extends "portal/portal_base.html" %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Page Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">My Projects</h1>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Track timelines, deliverables, and budgets for your assigned projects.</p>
+        </div>
+    </div>
+
+    <!-- Projects Grid -->
+    {% if projects %}
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {% for proj in projects %}
+        {# Columns: 0 id, 1 name, 2 description, 3 start_date, 4 deadline, 5 status, 6 budget #}
+        <div class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-slate-200/80 dark:border-slate-800 rounded-[12px] p-6 shadow-sm flex flex-col justify-between transition-all hover:border-slate-300 dark:hover:border-slate-700">
+            <div>
+                <!-- Top Badge & Budget -->
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-medium px-2.5 py-1 rounded-full
+                        {% if proj[5] == 'Completed' %}bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400
+                        {% elif proj[5] == 'In Progress' %}bg-sky-100 text-sky-800 dark:bg-sky-900/30 dark:text-sky-400
+                        {% else %}bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400{% endif %}">
+                        {{ proj[5] or 'Pending' }}
+                    </span>
+                    <span class="font-mono text-sm font-semibold text-slate-900 dark:text-slate-100">${{ '%.2f'|format(proj[6] or 0) }}</span>
+                </div>
+
+                <!-- Project Title & Description -->
+                <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">{{ proj[1] }}</h3>
+                <p class="text-sm text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
+                    {{ proj[2] or 'No description provided.' }}
+                </p>
+            </div>
+
+            <!-- Footer: Start & Deadline Dates -->
+            <div class="mt-6 pt-4 border-t border-slate-200/60 dark:border-slate-800/60 grid grid-cols-2 gap-4 text-xs">
+                <div>
+                    <span class="text-slate-400 dark:text-slate-500 block mb-0.5">Start Date</span>
+                    <span class="font-mono font-medium text-slate-700 dark:text-slate-300">{{ proj[3] or 'N/A' }}</span>
+                </div>
+                <div>
+                    <span class="text-slate-400 dark:text-slate-500 block mb-0.5">Deadline</span>
+                    <span class="font-mono font-medium text-slate-700 dark:text-slate-300">{{ proj[4] or 'N/A' }}</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <!-- Empty State -->
+    <div class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-slate-200/80 dark:border-slate-800 rounded-[12px] p-12 text-center">
+        <p class="text-sm text-slate-500 dark:text-slate-400">No projects assigned to your account yet.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

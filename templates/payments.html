@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid px-4 py-4" style="max-width: 1440px;">
+    <!-- Header -->
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+            <h3 class="fw-bold tracking-tight mb-1" style="letter-spacing: -0.03em;">Payments Tracking</h3>
+            <p class="text-secondary small mb-0">Monitor incoming settlements, transaction methods, and payment history.</p>
+        </div>
+        <a href="{{ url_for('payments.add_payment') }}" class="btn fw-medium px-3.5 py-2 text-white d-inline-flex align-items-center gap-2" style="background: #09090b; border-radius: 10px; font-size: 0.875rem;">
+            <i class="bi bi-plus-lg"></i> Record New Payment
+        </a>
+    </div>
+
+    <!-- Table Container Card -->
+    <div class="card border border-light shadow-sm overflow-hidden bg-white" style="border-radius: 12px;">
+        <div class="table-responsive">
+            <table class="table align-middle mb-0" style="font-size: 0.875rem;">
+                <thead>
+                    <tr class="border-bottom" style="border-color: rgba(0,0,0,0.05); background: rgba(0,0,0,0.01);">
+                        <th class="ps-4 py-3 text-secondary fw-medium text-uppercase tracking-wider" style="font-size: 0.7rem;">Payment ID</th>
+                        <th class="py-3 text-secondary fw-medium text-uppercase tracking-wider" style="font-size: 0.7rem;">Invoice #</th>
+                        <th class="py-3 text-secondary fw-medium text-uppercase tracking-wider" style="font-size: 0.7rem;">Client Name</th>
+                        <th class="py-3 text-secondary fw-medium text-uppercase tracking-wider" style="font-size: 0.7rem;">Amount Paid</th>
+                        <th class="py-3 text-secondary fw-medium text-uppercase tracking-wider" style="font-size: 0.7rem;">Date</th>
+                        <th class="py-3 text-secondary fw-medium text-uppercase tracking-wider" style="font-size: 0.7rem;">Method</th>
+                        <th class="py-3 text-secondary fw-medium text-uppercase tracking-wider" style="font-size: 0.7rem;">Notes</th>
+                        <th class="pe-4 py-3 text-end text-secondary fw-medium text-uppercase tracking-wider" style="font-size: 0.7rem;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y" style="border-color: rgba(0,0,0,0.04);">
+                    {% if payments %}
+                        {% for pay in payments %}
+                        <tr class="transition-colors" style="transition: background 0.15s ease;" onmouseover="this.style.background='rgba(0,0,0,0.015)'" onmouseout="this.style.background='transparent'">
+                            <td class="ps-4 font-monospace text-secondary" style="font-size: 0.75rem;">#{{ pay[0] }}</td>
+                            <td class="fw-semibold text-dark font-monospace" style="font-size: 0.75rem;">{{ pay[1] }}</td>
+                            <td class="fw-medium text-dark">{{ pay[2] }}</td>
+                            <td class="fw-semibold font-monospace" style="color: #059669; font-size: 0.875rem;">${{ pay[3] }}</td>
+                            <td class="text-secondary font-monospace" style="font-size: 0.75rem;">{{ pay[4] }}</td>
+                            <td>
+                                <span class="d-inline-flex align-items-center gap-1.5 px-2.5 py-1 rounded-pill fw-medium" style="background: rgba(13, 110, 253, 0.08); color: #0d6efd; font-size: 0.75rem;">
+                                    <span class="rounded-circle" style="width: 5px; height: 5px; background: #0d6efd;"></span> {{ pay[5] }}
+                                </span>
+                            </td>
+                            <td class="text-secondary small">{{ pay[6] or 'N/A' }}</td>
+                            <td class="pe-4 text-end">
+                                <div class="d-inline-flex gap-1">
+                                    <a href="{{ url_for('payments.edit_payment', id=pay[0]) }}" class="btn btn-sm border px-2 py-1 text-dark bg-light" title="Edit" style="border-radius: 8px; border-color: rgba(0,0,0,0.08) !important;">
+                                        <i class="bi bi-pencil" style="font-size: 0.75rem;"></i>
+                                    </a>
+                                    <form action="{{ url_for('payments.delete_payment', id=pay[0]) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Are you sure you want to delete this payment record?');">
+                                        <button type="submit" class="btn btn-sm border px-2 py-1 text-danger bg-light" title="Delete" style="border-radius: 8px; border-color: rgba(0,0,0,0.08) !important;">
+                                            <i class="bi bi-trash" style="font-size: 0.75rem;"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="8" class="text-center py-6 text-secondary">
+                                <div class="mb-2"><i class="bi bi-credit-card fs-3 opacity-25"></i></div>
+                                <p class="mb-0 small">No payment records found. Click "Record New Payment" to add one.</p>
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid px-4 py-4" style="max-width: 1000px;">
+    <!-- Header Section -->
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+            <h3 class="fw-bold tracking-tight mb-1" style="letter-spacing: -0.03em;">Edit Lead</h3>
+            <p class="text-secondary small mb-0">Updating profile and pipeline parameters for <span class="font-monospace text-dark">{{ lead[1] }}</span>.</p>
+        </div>
+        <a href="{{ url_for('leads.manage_leads') }}" class="btn btn-light border px-3 py-2 fw-medium text-secondary" style="border-radius: 10px; font-size: 0.875rem;">
+            <i class="bi bi-arrow-left me-1"></i> Back
+        </a>
+    </div>
+
+    <!-- Form Card -->
+    <div class="card border border-light shadow-sm p-4 bg-white" style="border-radius: 12px;">
+        <form method="POST">
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-secondary small">Full Name *</label>
+                    <input type="text" class="form-control border-0 bg-light py-2" name="name" value="{{ lead[1] }}" required style="border-radius: 10px; font-size: 0.875rem;">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-secondary small">Company Name</label>
+                    <input type="text" class="form-control border-0 bg-light py-2" name="company" value="{{ lead[2] }}" style="border-radius: 10px; font-size: 0.875rem;">
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-secondary small">Phone Number *</label>
+                    <input type="text" class="form-control border-0 bg-light py-2 font-monospace" name="phone" value="{{ lead[3] }}" required style="border-radius: 10px; font-size: 0.875rem;">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-secondary small">Email Address</label>
+                    <input type="email" class="form-control border-0 bg-light py-2" name="email" value="{{ lead[4] }}" style="border-radius: 10px; font-size: 0.875rem;">
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold text-secondary small">Source</label>
+                    <select class="form-select border-0 bg-light py-2" name="source" style="border-radius: 10px; font-size: 0.875rem;">
+                        <option value="Website" {% if lead[5] == 'Website' %}selected{% endif %}>Website</option>
+                        <option value="Social Media" {% if lead[5] == 'Social Media' %}selected{% endif %}>Social Media</option>
+                        <option value="Referral" {% if lead[5] == 'Referral' %}selected{% endif %}>Referral</option>
+                        <option value="Direct Call" {% if lead[5] == 'Direct Call' %}selected{% endif %}>Direct Call</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold text-secondary small">Service Interested In</label>
+                    <input type="text" class="form-control border-0 bg-light py-2" name="service_interested" value="{{ lead[6] }}" style="border-radius: 10px; font-size: 0.875rem;">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold text-secondary small">Lead Status</label>
+                    <select class="form-select border-0 bg-light py-2" name="lead_status" style="border-radius: 10px; font-size: 0.875rem;">
+                        <option value="New" {% if lead[7] == 'New' %}selected{% endif %}>New</option>
+                        <option value="Contacted" {% if lead[7] == 'Contacted' %}selected{% endif %}>Contacted</option>
+                        <option value="In Progress" {% if lead[7] == 'In Progress' %}selected{% endif %}>In Progress</option>
+                        <option value="Won" {% if lead[7] == 'Won' %}selected{% endif %}>Won</option>
+                        <option value="Lost" {% if lead[7] == 'Lost' %}selected{% endif %}>Lost</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-secondary small">Assigned Salesperson</label>
+                    <input type="text" class="form-control border-0 bg-light py-2" name="assigned_salesperson" value="{{ lead[8] }}" style="border-radius: 10px; font-size: 0.875rem;">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-secondary small">Follow-up Date</label>
+                    <input type="date" class="form-control border-0 bg-light py-2 font-monospace" name="follow_up_date" value="{{ lead[10] }}" style="border-radius: 10px; font-size: 0.875rem;">
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-semibold text-secondary small">Notes / Remarks</label>
+                <textarea class="form-control border-0 bg-light py-2" name="notes" rows="3" style="border-radius: 10px; font-size: 0.875rem;">{{ lead[9] }}</textarea>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 pt-2 border-top" style="border-color: rgba(0,0,0,0.05) !important;">
+                <a href="{{ url_for('leads.manage_leads') }}" class="btn btn-light px-4 py-2 fw-medium text-secondary" style="border-radius: 10px; font-size: 0.875rem;">Cancel</a>
+                <button type="submit" class="btn px-4 py-2 fw-medium text-white shadow-sm" style="background: #09090b; border-radius: 10px; font-size: 0.875rem;">
+                    <i class="bi bi-save me-1"></i> Update Lead
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock%}

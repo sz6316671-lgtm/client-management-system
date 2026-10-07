@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Invoices | SysZenix CRM{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4 py-4" style="max-width: 1440px;">
+    <!-- Header -->
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+            <h3 class="fw-bold mb-1" style="letter-spacing: -0.03em;">Invoices Management</h3>
+            <p class="text-secondary small mb-0">Track billing status, settlements, and due dates.</p>
+        </div>
+        <a href="{{ url_for('invoices.add_invoice') }}" class="btn fw-medium px-3 py-2 text-white d-inline-flex align-items-center gap-2" style="background: #09090b; border-radius: 10px; font-size: 0.875rem;">
+            <i class="bi bi-plus-lg"></i> Add New Invoice
+        </a>
+    </div>
+
+    {# Status -> (background, text color, dot color) #}
+    {% set badges = {
+        'Paid':    ('rgba(16, 185, 129, 0.1)', '#059669', '#10b981'),
+        'Unpaid':  ('rgba(239, 68, 68, 0.1)', '#dc2626', '#ef4444'),
+        'Overdue': ('rgba(239, 68, 68, 0.1)', '#dc2626', '#ef4444')
+    } %}
+
+    <!-- Table Container Card -->
+    <div class="card border border-light shadow-sm overflow-hidden bg-white" style="border-radius: 12px;">
+        <div class="table-responsive">
+            <table class="table align-middle mb-0" style="font-size: 0.875rem;">
+                <thead>
+                    <tr class="border-bottom" style="background: rgba(0,0,0,0.01);">
+                        <th class="ps-4 py-3 text-secondary fw-medium text-uppercase" style="font-size: 0.7rem;">Invoice #</th>
+                        <th class="py-3 text-secondary fw-medium text-uppercase" style="font-size: 0.7rem;">Client Name</th>
+                        <th class="py-3 text-secondary fw-medium text-uppercase" style="font-size: 0.7rem;">Amount</th>
+                        <th class="py-3 text-secondary fw-medium text-uppercase" style="font-size: 0.7rem;">Status</th>
+                        <th class="py-3 text-secondary fw-medium text-uppercase" style="font-size: 0.7rem;">Due Date</th>
+                        <th class="pe-4 py-3 text-end text-secondary fw-medium text-uppercase" style="font-size: 0.7rem;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for inv in invoices %}
+                    {% set b = badges.get(inv[4], ('rgba(245, 158, 11, 0.12)', '#d97706', '#f59e0b')) %}
+                    <tr>
+                        <td class="ps-4 fw-semibold text-dark font-monospace" style="font-size: 0.75rem;">{{ inv[2] }}</td>
+                        <td class="fw-medium text-dark">{{ inv[1] }}</td>
+                        <td class="fw-semibold text-dark font-monospace">${{ '{:,.2f}'.format(inv[3] or 0) }}</td>
+                        <td>
+                            <span class="d-inline-flex align-items-center gap-1 px-2 py-1 rounded-pill fw-medium" style="background: {{ b[0] }}; color: {{ b[1] }}; font-size: 0.75rem;">
+                                <span class="rounded-circle d-inline-block" style="width: 5px; height: 5px; background: {{ b[2] }};"></span> {{ inv[4] or 'Pending' }}
+                            </span>
+                        </td>
+                        <td class="text-secondary font-monospace" style="font-size: 0.75rem;">{{ inv[5] or 'N/A' }}</td>
+                        <td class="pe-4 text-end">
+                            <div class="d-inline-flex gap-1">
+                                <a href="{{ url_for('invoices.download_invoice_pdf', id=inv[0]) }}" class="btn btn-sm border px-2 py-1 text-success bg-light" title="Download PDF" style="border-radius: 8px; border-color: rgba(0,0,0,0.08) !important;">
+                                    <i class="bi bi-file-earmark-pdf" style="font-size: 0.75rem;"></i>
+                                </a>
+                                <a href="{{ url_for('invoices.edit_invoice', id=inv[0]) }}" class="btn btn-sm border px-2 py-1 text-dark bg-light" title="Edit" style="border-radius: 8px; border-color: rgba(0,0,0,0.08) !important;">
+                                    <i class="bi bi-pencil" style="font-size: 0.75rem;"></i>
+                                </a>
+                                <form action="{{ url_for('invoices.delete_invoice', id=inv[0]) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Are you sure you want to delete this invoice?');">
+                                    <button type="submit" class="btn btn-sm border px-2 py-1 text-danger bg-light" title="Delete" style="border-radius: 8px; border-color: rgba(0,0,0,0.08) !important;">
+                                        <i class="bi bi-trash" style="font-size: 0.75rem;"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center py-5 text-secondary">
+                            <div class="mb-2"><i class="bi bi-receipt fs-3 opacity-25"></i></div>
+                            <p class="mb-0 small">No invoices found. Click "Add New Invoice" to create one.</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

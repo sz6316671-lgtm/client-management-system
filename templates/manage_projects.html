@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}Projects — SysZenix CRM{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4 py-4" style="max-width: 1440px;">
+    <!-- Header -->
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+            <h3 class="fw-bold tracking-tight mb-1" style="letter-spacing: -0.03em;">Projects</h3>
+            <p class="text-secondary small mb-0">Track active deliveries, timelines, and engagement budgets.</p>
+        </div>
+        <a href="/add-project" class="btn fw-medium px-3.5 py-2 text-white d-inline-flex align-items-center gap-2" style="background: #09090b; border-radius: 10px; font-size: 0.875rem;">
+            <i class="bi bi-plus-lg"></i> New Project
+        </a>
+    </div>
+
+    <!-- Filter / Search Bar -->
+    <div class="card border border-light shadow-sm p-2 mb-3 bg-white" style="border-radius: 12px;">
+        <form action="/manage-projects" method="GET" class="w-100 d-flex align-items-center gap-2 mb-0">
+            <div class="input-group align-items-center border-0 bg-transparent px-2">
+                <i class="bi bi-search text-secondary me-2"></i>
+                <input type="text" class="form-control border-0 shadow-none bg-transparent ps-0" name="search" placeholder="Search by project name, client, or status..." value="{{ request.args.get('search', '') }}" style="font-size: 0.875rem;">
+            </div>
+            {% if request.args.get('search') %}
+                <a href="/manage-projects" class="btn btn-sm text-secondary border-0">Clear</a>
+            {% endif %}
+        </form>
+    </div>
+
+    <!-- Table Container -->
+    <div class="card border border-light shadow-sm overflow-hidden bg-white" style="border-radius: 12px;">
+        <div class="table-responsive">
+            <table class="table align-middle mb-0" style="font-size: 0.875rem;">
+                <thead>
+                    <tr class="border-bottom" style="border-color: rgba(0,0,0,0.05); background: rgba(0,0,0,0.01);">
+                        <th class="ps-4 py-3 text-secondary fw-medium text-uppercase tracking-wider" style="font-size: 0.7rem;">ID</th>
+                        <th class="py-3 text-secondary fw-medium text-uppercase tracking-wider" style="font-size: 0.7rem;">Client</th>
+                        <th class="py-3 text-secondary fw-medium text-uppercase tracking-wider" style="font-size: 0.7rem;">Project Name</th>
+                        <th class="py-3 text-secondary fw-medium text-uppercase tracking-wider" style="font-size: 0.7rem;">Timeline</th>
+                        <th class="py-3 text-secondary fw-medium text-uppercase tracking-wider" style="font-size: 0.7rem;">Budget</th>
+                        <th class="py-3 text-secondary fw-medium text-uppercase tracking-wider" style="font-size: 0.7rem;">Status</th>
+                        <th class="pe-4 py-3 text-end text-secondary fw-medium text-uppercase tracking-wider" style="font-size: 0.7rem;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y" style="border-color: rgba(0,0,0,0.04);">
+                    {% for project in projects %}
+                    <tr class="transition-colors" style="transition: background 0.15s ease;" onmouseover="this.style.background='rgba(0,0,0,0.015)'" onmouseout="this.style.background='transparent'">
+                        <td class="ps-4 text-secondary font-monospace" style="font-size: 0.75rem;">#{{ project[0] }}</td>
+                        <td class="fw-medium text-dark">{{ project[1] }}</td>
+                        <td class="fw-semibold text-dark">{{ project[2] }}</td>
+                        <td class="text-secondary" style="font-size: 0.8rem;">
+                            <div><i class="bi bi-play-circle text-muted me-1"></i>{{ project[4] }}</div>
+                            <div class="text-muted"><i class="bi bi-flag text-muted me-1"></i>{{ project[5] }}</div>
+                        </td>
+                        <td class="fw-semibold text-dark font-monospace">${{ project[7] }}</td>
+                        <td>
+                            {% if project[6] == 'Completed' %}
+                                <span class="d-inline-flex align-items-center gap-1.5 px-2.5 py-1 rounded-pill fw-medium" style="background: rgba(16, 185, 129, 0.1); color: #059669; font-size: 0.75rem;">
+                                    <span class="rounded-circle" style="width: 5px; height: 5px; background: #10b981;"></span> Completed
+                                </span>
+                            {% elif project[6] == 'In Progress' %}
+                                <span class="d-inline-flex align-items-center gap-1.5 px-2.5 py-1 rounded-pill fw-medium" style="background: rgba(245, 158, 11, 0.12); color: #d97706; font-size: 0.75rem;">
+                                    <span class="rounded-circle" style="width: 5px; height: 5px; background: #f59e0b;"></span> In Progress
+                                </span>
+                            {% else %}
+                                <span class="d-inline-flex align-items-center gap-1.5 px-2.5 py-1 rounded-pill fw-medium text-secondary" style="background: rgba(0,0,0,0.05); font-size: 0.75rem;">
+                                    <span class="rounded-circle" style="width: 5px; height: 5px; background: #71717a;"></span> {{ project[6] }}
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td class="pe-4 text-end">
+                            <div class="d-inline-flex gap-1">
+                                <a href="/edit-project/{{ project[0] }}" class="btn btn-sm btn-light border-0 px-2.5 py-1.5 text-secondary hover-text-dark" style="border-radius: 8px;">
+                                    <i class="bi bi-pencil" style="font-size: 0.75rem;"></i>
+                                </a>
+                                <a href="/delete-project/{{ project[0] }}" class="btn btn-sm btn-light border-0 px-2.5 py-1.5 text-secondary hover-text-danger" style="border-radius: 8px;" onclick="return confirm('Delete project record?');">
+                                    <i class="bi bi-trash" style="font-size: 0.75rem;"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center py-5 text-secondary">
+                            <div class="mb-2"><i class="bi bi-briefcase fs-3 opacity-25"></i></div>
+                            <p class="mb-0 small">No projects match current filters.</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

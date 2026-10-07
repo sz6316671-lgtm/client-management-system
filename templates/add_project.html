@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}New Project — SysZenix CRM{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4 py-4" style="max-width: 1000px;">
+    <!-- Header Section -->
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+            <h3 class="fw-bold tracking-tight mb-1" style="letter-spacing: -0.03em;">Add New Project</h3>
+            <p class="text-secondary small mb-0">Initialize delivery timeline, scope, and budget for a client.</p>
+        </div>
+        <a href="/manage-projects" class="btn btn-light border px-3 py-2 fw-medium text-secondary" style="border-radius: 10px; font-size: 0.875rem;">
+            <i class="bi bi-arrow-left me-1"></i> Back
+        </a>
+    </div>
+
+    <!-- Form Card -->
+    <div class="card border border-light shadow-sm p-4 bg-white" style="border-radius: 12px;">
+        <form action="/add-project" method="POST">
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-secondary small">Select Client *</label>
+                    <select class="form-select border-0 bg-light py-2" name="client_id" required style="border-radius: 10px; font-size: 0.875rem;">
+                        <option value="" disabled selected>Choose a client...</option>
+                        {% for client in clients %}
+                            <option value="{{ client[0] }}">{{ client[1] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-secondary small">Project Name *</label>
+                    <input type="text" class="form-control border-0 bg-light py-2" name="project_name" placeholder="e.g. SysZenix V2 Overhaul" required style="border-radius: 10px; font-size: 0.875rem;">
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-secondary small">Start Date</label>
+                    <input type="date" class="form-control border-0 bg-light py-2" name="start_date" style="border-radius: 10px; font-size: 0.875rem;">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-secondary small">Deadline</label>
+                    <input type="date" class="form-control border-0 bg-light py-2" name="deadline" style="border-radius: 10px; font-size: 0.875rem;">
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-secondary small">Budget ($)</label>
+                    <input type="number" step="0.01" class="form-control border-0 bg-light py-2 font-monospace" name="budget" placeholder="0.00" style="border-radius: 10px; font-size: 0.875rem;">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-secondary small">Status</label>
+                    <select class="form-select border-0 bg-light py-2" name="status" style="border-radius: 10px; font-size: 0.875rem;">
+                        <option value="Pending">Pending</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-semibold text-secondary small">Description / Deliverables Scope</label>
+                <textarea class="form-control border-0 bg-light py-2" name="description" rows="3" placeholder="Brief scope notes..." style="border-radius: 10px; font-size: 0.875rem;"></textarea>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 pt-2 border-top" style="border-color: rgba(0,0,0,0.05) !important;">
+                <a href="/manage-projects" class="btn btn-light px-4 py-2 fw-medium text-secondary" style="border-radius: 10px; font-size: 0.875rem;">Cancel</a>
+                <button type="submit" class="btn px-4 py-2 fw-medium text-white shadow-sm" style="background: #09090b; border-radius: 10px; font-size: 0.875rem;">
+                    <i class="bi bi-plus-lg me-1"></i> Save Project
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

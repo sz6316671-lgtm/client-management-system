@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Branding Settings{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4 py-4" style="max-width: 1000px;">
+    <div class="mb-4">
+        <h3 class="fw-bold mb-1">Branding Settings</h3>
+        <p class="text-secondary small mb-0">Change the CRM logo and company name. Only administrators can access this page.</p>
+    </div>
+
+    <div class="card bg-white p-4">
+        <form method="POST" enctype="multipart/form-data">
+            <div class="row g-4 align-items-start">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Company Name</label>
+                    <input type="text" name="company_name" class="form-control" maxlength="150"
+                           value="{{ branding.company_name }}" required>
+                    <div class="form-text">This name appears beside the logo and on the login screen.</div>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Logo</label>
+                    <input type="file" name="logo" class="form-control"
+                           accept=".png,.jpg,.jpeg,.gif,.webp,.svg,image/png,image/jpeg,image/gif,image/webp,image/svg+xml">
+                    <div class="form-text">PNG, JPG, JPEG, GIF, WEBP or SVG.</div>
+                </div>
+            </div>
+
+            <div class="mt-4 p-4 rounded-3 border bg-light">
+                <div class="small text-secondary mb-2">Current branding</div>
+                <div class="d-flex align-items-center gap-3">
+                    {% if branding.logo_url %}
+                        <img src="{{ branding.logo_url }}" alt="Current logo"
+                             style="max-width:220px; max-height:70px; object-fit:contain;">
+                    {% else %}
+                        <div class="bg-success text-white rounded-3 d-flex align-items-center justify-content-center"
+                             style="width:52px;height:52px;">
+                            <i class="bi bi-layers-fill fs-4"></i>
+                        </div>
+                    {% endif %}
+                    <div>
+                        <div class="fw-bold">{{ branding.company_name }}</div>
+                        <div class="small text-secondary">Logo preview</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex gap-2 mt-4">
+                <button type="submit" class="btn btn-success px-4">
+                    <i class="bi bi-check2-circle me-1"></i> Save Branding
+                </button>
+            </div>
+        </form>
+
+        {% if branding.logo_url %}
+        <form method="POST" action="{{ url_for('branding.remove_logo') }}" class="mt-3"
+              onsubmit="return confirm('Remove the current logo?');">
+            <button type="submit" class="btn btn-outline-danger">
+                <i class="bi bi-trash me-1"></i> Remove Logo
+            </button>
+        </form>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid px-4 py-4" style="max-width: 1000px;">
+    <!-- Header Section -->
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+            <h3 class="fw-bold tracking-tight mb-1" style="letter-spacing: -0.03em;">Record Payment</h3>
+            <p class="text-secondary small mb-0">Log transaction settlement and reference invoice details.</p>
+        </div>
+        <a href="{{ url_for('payments.manage_payments') }}" class="btn btn-light border px-3 py-2 fw-medium text-secondary" style="border-radius: 10px; font-size: 0.875rem;">
+            <i class="bi bi-arrow-left me-1"></i> Back
+        </a>
+    </div>
+
+    <!-- Form Card -->
+    <div class="card border border-light shadow-sm p-4 bg-white" style="border-radius: 12px;">
+        <form method="POST">
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-secondary small">Select Invoice *</label>
+                    <select name="invoice_id" class="form-select border-0 bg-light py-2" required style="border-radius: 10px; font-size: 0.875rem;">
+                        <option value="" disabled selected>Choose invoice...</option>
+                        {% for inv in invoices %}
+                            <option value="{{ inv[0] }}">{{ inv[1] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-secondary small">Amount Paid ($) *</label>
+                    <input type="number" step="0.01" name="amount_paid" class="form-control border-0 bg-light py-2 font-monospace" placeholder="0.00" required style="border-radius: 10px; font-size: 0.875rem;">
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-secondary small">Payment Date *</label>
+                    <input type="date" name="payment_date" class="form-control border-0 bg-light py-2 font-monospace" required style="border-radius: 10px; font-size: 0.875rem;">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-secondary small">Payment Method *</label>
+                    <select name="payment_method" class="form-select border-0 bg-light py-2" required style="border-radius: 10px; font-size: 0.875rem;">
+                        <option value="Bank Transfer" selected>Bank Transfer</option>
+                        <option value="Cash">Cash</option>
+                        <option value="JazzCash">JazzCash</option>
+                        <option value="EasyPaisa">EasyPaisa</option>
+                        <option value="Credit Card">Credit Card</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-semibold text-secondary small">Notes</label>
+                <textarea name="notes" class="form-control border-0 bg-light py-2" rows="3" placeholder="Optional notes about the transaction..." style="border-radius: 10px; font-size: 0.875rem;"></textarea>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 pt-2 border-top" style="border-color: rgba(0,0,0,0.05) !important;">
+                <a href="{{ url_for('payments.manage_payments') }}" class="btn btn-light px-4 py-2 fw-medium text-secondary" style="border-radius: 10px; font-size: 0.875rem;">Cancel</a>
+                <button type="submit" class="btn px-4 py-2 fw-medium text-white shadow-sm" style="background: #09090b; border-radius: 10px; font-size: 0.875rem;">
+                    <i class="bi bi-save me-1"></i> Save Payment
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

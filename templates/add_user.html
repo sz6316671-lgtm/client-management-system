@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid px-4 py-4" style="max-width: 800px;">
+    <!-- Header Section -->
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+            <h3 class="fw-bold tracking-tight mb-1" style="letter-spacing: -0.03em;">Add New User</h3>
+            <p class="text-secondary small mb-0">Create new system credentials and assign role permissions.</p>
+        </div>
+        <a href="{{ url_for('users.manage_users') }}" class="btn btn-light border px-3 py-2 fw-medium text-secondary" style="border-radius: 10px; font-size: 0.875rem;">
+            <i class="bi bi-arrow-left me-1"></i> Back
+        </a>
+    </div>
+
+    <!-- Form Card -->
+    <div class="card border border-light shadow-sm p-4 bg-white" style="border-radius: 12px;">
+        <form method="POST">
+            <div class="mb-3">
+                <label class="form-label fw-semibold text-secondary small">Username *</label>
+                <input type="text" name="username" class="form-control border-0 bg-light py-2" required placeholder="Enter username..." style="border-radius: 10px; font-size: 0.875rem;">
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-semibold text-secondary small">Password *</label>
+                <input type="password" name="password" class="form-control border-0 bg-light py-2" required placeholder="Enter password..." style="border-radius: 10px; font-size: 0.875rem;">
+            </div>
+            <div class="mb-4">
+                <label class="form-label fw-semibold text-secondary small">Role *</label>
+                <select name="role" class="form-select border-0 bg-light py-2" required style="border-radius: 10px; font-size: 0.875rem;">
+                    <option value="" disabled selected>Select role...</option>
+                    <option value="admin">Admin</option>
+                    <option value="client">Client</option>
+                </select>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 pt-2 border-top" style="border-color: rgba(0,0,0,0.05) !important;">
+                <a href="{{ url_for('users.manage_users') }}" class="btn btn-light px-4 py-2 fw-medium text-secondary" style="border-radius: 10px; font-size: 0.875rem;">Cancel</a>
+                <button type="submit" class="btn px-4 py-2 fw-medium text-white shadow-sm" style="background: #09090b; border-radius: 10px; font-size: 0.875rem;">
+                    <i class="bi bi-save me-1"></i> Save User
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
